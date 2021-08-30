@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    >
+    <meta
+      http-equiv="X-UA-Compatible"
+      content="ie=edge"
+    >
+    <title>Remote audio control</title>
+    <link
+      rel="stylesheet"
+      href="/bootstrap.css"
+      type="text/css"
+    >
+  </head>
+  <body>
+    <main class="container visually-hidden">
+      <label for="volume">Volume: </label>
+      <input type="range" class="form-range" id="volume" oninput="submitNewVolume(parseInt(this.value))" min="0" max="100" step="1">
+      <span id="volumeDisplay"></span>
+    </main>
+    <script>
+      let transmitting = false;
+      const volumeDisplay = document.querySelector('#volumeDisplay');
+      async function submitNewVolume(volume) {
+        if (transmitting) return;
+        transmitting = true;
+        await fetch('/volume', { method: 'PUT', body: JSON.stringify({volume}), headers: { 'Content-Type': 'application/json' } });
+        volumeDisplay.innerHTML = volume;
+        transmitting = false;
+      }
+      async function main() {
+        const volumeResponse = await fetch('/volume');
+        if (!volumeResponse.ok) {
+          alert('could not load system volume. are you sure the server is running properly?');
+          return;
+        }
+        const volume = await volumeResponse.json();
+        document.querySelector('#volume').value = volume;
+        volumeDisplay.innerHTML = volume;
+        document.querySelector('main').classList.remove('visually-hidden');
+      }
+
+      main();
+    </script>
+  </body>
+</html>
