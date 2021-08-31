@@ -19,32 +19,17 @@
   </head>
   <body>
     <main class="container visually-hidden">
-      <label for="volume">Volume: </label>
-      <input type="range" class="form-range" id="volume" oninput="submitNewVolume(parseInt(this.value))" min="0" max="100" step="1">
-      <span id="volumeDisplay"></span>
+      <div class="row">
+        <label for="volume" class="col-12">Volume: </label>
+        <input type="range" class="form-range col-10" id="volume" oninput="submitNewVolume(parseInt(this.value))" min="0" max="100" step="1">
+        <span id="volumeDisplay" class="col-2"></span>
+      </div>
+      <div class="row">
+        <button class="btn btn-info col-12" onclick="togglePlay()">Toggle play</button>
+      </div>
     </main>
+    <script src="app.js"></script>
     <script>
-      let transmitting = false;
-      const volumeDisplay = document.querySelector('#volumeDisplay');
-      async function submitNewVolume(volume) {
-        if (transmitting) return;
-        transmitting = true;
-        await fetch('/volume', { method: 'PUT', body: JSON.stringify({volume}), headers: { 'Content-Type': 'application/json' } });
-        volumeDisplay.innerHTML = volume;
-        transmitting = false;
-      }
-      async function main() {
-        const volumeResponse = await fetch('/volume');
-        if (!volumeResponse.ok) {
-          alert('could not load system volume. are you sure the server is running properly?');
-          return;
-        }
-        const volume = await volumeResponse.json();
-        document.querySelector('#volume').value = volume;
-        volumeDisplay.innerHTML = volume;
-        document.querySelector('main').classList.remove('visually-hidden');
-      }
-
       main();
     </script>
   </body>
