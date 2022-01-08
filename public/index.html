@@ -16,16 +16,30 @@
       href="/bootstrap.css"
       type="text/css"
     >
+    <style>
+      main {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    </style>
   </head>
   <body>
-    <main class="container visually-hidden">
-      <div class="row">
-        <label for="volume" class="col-12">Volume: </label>
-        <input type="range" class="form-range col-10" id="volume" oninput="submitNewVolume(parseInt(this.value))" min="0" max="100" step="1">
-        <span id="volumeDisplay" class="col-2"></span>
-      </div>
-      <div class="row">
-        <button class="btn btn-info col-12" onclick="togglePlay()">Toggle play</button>
+    <main class="container-fluid visually-hidden">
+      <div class="align-middle">
+        <div class="row">
+          <label for="volume" class="col-12">Volume: </label>
+          <input type="range" class="form-range col-10" id="volume" oninput="submitNewVolume(parseInt(this.value))" min="0" max="100" step="1">
+          <span id="volumeDisplay" class="col-2"></span>
+        </div>
+        <div class="row">
+          <button class="btn btn-info col-6" onclick="submitNewVolume(currentVolume + 5)">+5</button>
+          <button class="btn btn-info col-6" onclick="submitNewVolume(currentVolume - 5)">-5</button>
+        </div>
+        <div class="row">
+          <button class="btn btn-info col-12" onclick="togglePlay()">Toggle play</button>
+        </div>
       </div>
     </main>
     <script src="app.js"></script>
